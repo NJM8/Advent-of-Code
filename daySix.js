@@ -60,13 +60,6 @@ var parseInput = function(input) {
 	for (var i = 0; i < splitInput.length; i++) {
 		var re = /\W/;
 		var currentInput = splitInput[i].split(re);
-		var numbersInput = currentInput.filter(numberFilter);
-
-		var currentStartingX = undefined;
-		var currentStartingY = undefined;
-		var currentEndingX = undefined;
-		var currentEndingY = undefined;
-		var currentState = undefined;
 
 		if (currentInput[0] === "") {
 			currentInput = currentInput.slice(1,currentInput.length);
@@ -75,6 +68,14 @@ var parseInput = function(input) {
 		if (currentInput[0] === "turn") {
 			currentInput = currentInput.slice(1,currentInput.length);
 		}
+		var numbersInput = currentInput.filter(numberFilter);
+
+		var currentStartingX = undefined;
+		var currentStartingY = undefined;
+		var currentEndingX = undefined;
+		var currentEndingY = undefined;
+		var currentState = undefined;
+
 		currentState = currentInput[0];
 
 		for (var k = 0; k < numbersInput.length; k++) {
@@ -82,12 +83,16 @@ var parseInput = function(input) {
 			switch (k) {
 				case 0:
 					currentStartingX = currentNum;
+					break;
 				case 1:
 					currentStartingY = currentNum;
+					break;
 				case 2:
 					currentEndingX = currentNum;
+					break;
 				case 3:
 					currentEndingY = currentNum;
+					break;
 			}
 		}
 		var instruction = new SingleInput(currentStartingX, currentStartingY, currentEndingX, currentEndingY, currentState);
@@ -114,7 +119,7 @@ var changeState = function(instruction) {
 				var currentState = lights[i][j].state;
 				if (currentState === "on")	{
 					lights[i][j].state = "off";
-				} else if (currentState = "off") {
+				} else {
 					lights[i][j].state = "on";
 				}
 			}
@@ -122,13 +127,8 @@ var changeState = function(instruction) {
 	}
 };
 
-var main = function(lengthOfX, lengthOfY, initialState, input) {
+var countLights = function(lengthOfX, lengthOfY) {
 	var lightCount = 0;
-	parseInput(input);
-	buildArray(lengthOfX, lengthOfY, initialState);
-	for (var i = 0; i < finalInput.length; i++) {
-		changeState(finalInput[i]);
-	}
 	for (var j = 0; j <= lengthOfX; j++) {
 		for (var k = 0; k <= lengthOfY; k++) {
 			if (lights[j][k].state === "on") {
@@ -136,14 +136,24 @@ var main = function(lengthOfX, lengthOfY, initialState, input) {
 			}
 		}
 	}
+	return lightCount;
+}
 
-	console.log(lightCount);
+var main = function(lengthOfX, lengthOfY, initialState, input) {
+	parseInput(input);
+	buildArray(lengthOfX, lengthOfY, initialState);
+	for (var i = 0; i < finalInput.length; i++) {
+		changeState(finalInput[i]);
+	}
+
+	var answer = countLights(lengthOfX, lengthOfY);
+
+	console.log(answer);
 };
 
 var testInput = ("turn on 0,0 through 999,999: toggle 0,0 through 999,0: turn off 499,499 through 500,500")
 
 main(999, 999, "off", input);
-
 
 
 
