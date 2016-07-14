@@ -161,10 +161,59 @@ var partOne = function(lengthOfX, lengthOfY, initialState, input) {
 	console.log(answer);
 };
 
-var testInput = ("turn on 0,0 through 999,999: toggle 0,0 through 999,0: turn off 499,499 through 500,500")
+var testInput = "turn on 0,0 through 999,999: toggle 0,0 through 999,0: turn off 499,499 through 500,500";
 
-partOne(999, 999, "off", input);
+// partOne(999, 999, "off", input);
 
+var changeStateTwo = function(instruction) {
+	if (instruction.state === "toggle") {
+		for (var i = instruction.startingX; i <= instruction.endingX; i++) {
+			for (var j = instruction.startingY; j <= instruction.endingY; j++) {
+				lights[i][j].state += 2;
+			}
+		}
+	} else if (instruction.state === "on"){
+		for (var i = instruction.startingX; i <= instruction.endingX; i++) {
+			for (var j = instruction.startingY; j <= instruction.endingY; j++) {
+				lights[i][j].state += 1;
+			}
+		}
+	} else if (instruction.state === "off"){
+		for (var i = instruction.startingX; i <= instruction.endingX; i++) {
+			for (var j = instruction.startingY; j <= instruction.endingY; j++) {
+				if (lights[i][j].state > 0) {
+					lights[i][j].state -= 1;
+				}
+			}
+		}
+	}
+};
+
+var countLightsTwo = function(lengthOfX, lengthOfY) {
+	var totalBrightness = 0;
+	for (var j = 0; j <= lengthOfX; j++) {
+		for (var k = 0; k <= lengthOfY; k++) {
+			totalBrightness += lights[j][k].state;
+		}
+	}
+	return totalBrightness;
+};
+
+var partTwo = function(lengthOfX, lengthOfY, initialState, input) {
+	parseInput(input);
+	buildArray(lengthOfX, lengthOfY, initialState);
+	for (var i = 0; i < finalInput.length; i++) {
+		changeStateTwo(finalInput[i]);
+	}
+
+	var answer = countLightsTwo(lengthOfX, lengthOfY);
+
+	console.log(answer);
+};
+
+var testInputTwo = "turn on 0,0 through 0,0:toggle 0,0 through 9,9:turn off 0,0 through 5,5";
+
+partTwo(999, 999, 0, input);
 
 
 
